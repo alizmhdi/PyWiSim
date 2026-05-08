@@ -12,7 +12,12 @@ We report four metrics:
     \item \textbf{Control overhead}: average number of summary exchanges.
 \end{itemize}
 
-All experiments are reproducible through the evaluation scripts \texttt{examples/evaluate\_spray\_wait.py} and \texttt{examples/evaluate\_spray\_wait\_loss.py}. These scripts write CSV outputs and generate the figures included below. The source code for the protocol, experiments, and report is publicly available at \url{https://github.com/alizmhdi/PyWiSim}. The main topology sweep in this report can be regenerated with \texttt{python examples/evaluate\_spray\_wait.py --copies 1 2 4 N --trials 50}.
+All experiments are reproducible through the evaluation scripts \path{examples/evaluate_spray_wait.py} and \path{examples/evaluate_spray_wait_loss.py}. These scripts write CSV outputs and generate the figures included below. The source code for the protocol, experiments, and report is publicly available at \url{https://github.com/alizmhdi/PyWiSim}. The main topology sweep in this report can be regenerated with the command below.
+
+\begin{quote}
+\small\ttfamily
+python examples/evaluate\_spray\_wait.py -{}-copies 1 2 4 N -{}-trials 50
+\end{quote}
 
 \subsection{Main Results}
 
