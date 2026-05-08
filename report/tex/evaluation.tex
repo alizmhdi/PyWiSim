@@ -12,16 +12,7 @@ We report four metrics:
     \item \textbf{Control overhead}: average number of summary exchanges.
 \end{itemize}
 
-All experiments are reproducible through the evaluation script \texttt{examples/evaluate\_spray\_wait.py}. The script writes the full CSV file and generates the figures included below. The exact experiment in this report can be regenerated with the command shown below.
-
-\begin{figure}[t]
-\begin{minipage}{\linewidth}
-\small\ttfamily
-python examples/evaluate\_spray\_wait.py --copies 1 2 4 N --trials 50
-\end{minipage}
-\caption{Command used to regenerate the reported results.}
-\label{lst:repro}
-\end{figure}
+All experiments are reproducible through the evaluation script \texttt{examples/evaluate\_spray\_wait.py}. The script writes the full CSV file and generates the figures included below. The exact experiment in this report can be regenerated with \texttt{python examples/evaluate\_spray\_wait.py --copies 1 2 4 N --trials 50}.
 
 \subsection{Main Results}
 

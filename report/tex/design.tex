@@ -17,11 +17,24 @@ Our implementation follows the binary variant of Spray and Wait~\cite{spyropoulo
     \item If the node holds exactly one copy and the peer is not the destination, it waits and does not forward further.
 \end{itemize}
 
+The protocol can therefore be understood as operating in two conceptual phases. In the \emph{spray phase}, the protocol tries to distribute a bounded number of independent forwarding opportunities across the network. A node with many copies should not keep all of them, because that would concentrate delivery chances in a single carrier. Instead, it hands part of its copy budget to newly encountered relays so that the bundle can spread spatially through future contacts. In the \emph{wait phase}, once a node has only one remaining copy, it stops replicating and acts conservatively: it carries that final copy until it directly encounters the destination. This structure is the key idea behind Spray and Wait. It preserves the advantage of multi-copy routing while avoiding the unbounded duplication of epidemic forwarding.
+
+Binary splitting is especially attractive because it balances copies quickly without requiring any global state. Suppose a source starts with $K{=}8$ copies. After one useful encounter, the source and relay each hold 4 copies. A later encounter can split one of those 4-copy holders into two 2-copy holders, and so on, until several relays each hold a single delivery opportunity. This creates multiple parallel chances for successful delivery, but the protocol never exceeds the original copy budget. By contrast, if $K{=}1$, the protocol collapses to direct transmission: no spraying is possible, and the source must wait until it meets the destination itself. If $K{=}2$, there can be at most one spray event before the protocol enters the wait phase. These edge cases are useful for interpreting the evaluation because they explain why increasing $K$ changes the delivery process qualitatively rather than just quantitatively.
+
+Another useful way to view the protocol is as a compromise between two extremes. At one extreme, single-copy forwarding is cheap in terms of data overhead but often suffers very poor delay and delivery probability in sparse networks. At the other extreme, epidemic-style dissemination can achieve excellent reachability, but it pays a large replication cost because every encounter can trigger additional copies. Binary Spray and Wait explicitly chooses a middle point: it allocates only a fixed budget of copies, but uses those copies opportunistically to explore multiple future contact paths. This design is particularly well suited to intermittently connected settings where no node can predict a complete end-to-end path in advance.
+
 This design has two useful properties. First, the total number of bundle copies never exceeds the initial budget $K$. Second, nodes that already reached the wait phase forward only to the final destination, which prevents the explosive replication behavior associated with flooding-based DTN schemes.
 
 \subsection{Implementation Details}
 
-The protocol is implemented in \texttt{spray\_wait.py}. A \texttt{BinarySprayWaitNode} stores its current bundles and reacts to four message types: \texttt{ENCOUNTER}, \texttt{SUMMARY}, \texttt{SPRAY}, and \texttt{DELIVER}. The encounter callback triggers a summary exchange, while the summary handler decides whether to spray copies or deliver directly to the destination.
+The protocol is implemented in \texttt{spray\_wait.py}. Its main node class,
+\texttt{BinarySpray\-Wait\-Node}, stores the current bundles and reacts to four
+message types: \texttt{ENCOUNTER}, \texttt{SUMMARY}, \texttt{SPRAY}, and
+\texttt{DELIVER}. The encounter callback triggers a summary exchange, while the
+summary handler decides whether to spray copies or deliver directly to the
+destination.
+
+The message flow during an encounter is intentionally simple. First, the encounter event tells both nodes that a communication opportunity exists. Next, each node sends a summary describing which bundle identifiers it already holds. This step prevents redundant spraying to a node that already carries the same bundle. After comparing summaries, a node either delivers the bundle directly, sprays part of its remaining copy budget, or does nothing if no useful action is possible. Because PyWiSim already models encounters as explicit pairwise events, this protocol logic can be expressed cleanly without a separate neighbor-discovery subsystem or routing-table maintenance procedure.
 
 To support a more honest evaluation, the implementation distinguishes between data and control transmissions:
 \begin{itemize}
