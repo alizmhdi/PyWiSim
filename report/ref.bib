@@ -1,57 +1,3 @@
-@InProceedings{	  metaopt,
-  title		= {Minding the gap between fast heuristics and their optimal
-		  counterparts},
-  author	= {Namyar, Pooria and Arzani, Behnaz and Beckett, Ryan and
-		  Segarra, Santiago and Raj, Himanshu and Kandula, Srikanth},
-  booktitle	= {Proceedings of the 21st ACM Workshop on Hot Topics in
-		  Networks},
-  pages		= {138--144},
-  year		= {2022}
-}
-
-@inproceedings{karimi2026metaease,
-  title={MetaEase: Heuristic Analysis from Source Code via Symbolic-Guided Optimization},
-  author={Karimi, Pantea and Kakarla, Siva Kesava Reddy and Namyar, Pooria and Segarra, Santiago and Beckett, Ryan and Alizadeh, Mohammad and Arzani, Behnaz},
-  journal = {USENIX Symposium on Networked Systems Design and Implementation 2026},
-  year={2026}
-}
-
-@InProceedings{Xplain,
-  author = 	 {Karimi, Pantea and Pirelli, Solal and Kakarla, Siva Kesava Reddy and Beckett, Ryan and Segarra, Santiago and Li, Beibin and Namyar, Pooria and Arzani, Behnaz},
-  title = 	 {Towards Safer Heuristics With XPlain},
-  booktitle = 	 {Proceedings of the 23rd ACM Workshop on Hot Topics in Networks},
-  year = 	 2024,
-  series = 	 {HotNets '24},
-  pages = 	 {68–76},
-  address = 	 {New York, NY, USA},
-  publisher = 	 {Association for Computing Machinery},
-  isbn = 	 9798400712722,
-  url = 	 {https://doi.org/10.1145/3696348.3696884},
-  doi = 	 {10.1145/3696348.3696884},
-  abstract = 	 {Many problems that cloud operators solve are computationally expensive, and operators often use heuristic algorithms (that are faster and scale better than optimal) to solve them more efficiently. Heuristic analyzers enable operators to find when and by how much their heuristics underperform. However, these tools do not provide enough detail for operators to mitigate the heuristic's impact in practice: they only discover a single input instance that causes the heuristic to underperform (and not the full set) and they do not explain why. We propose XPlain, a tool that extends these analyzers and helps operators understand when and why their heuristics underperform. We present promising initial results that show such an extension is viable.},
-  numpages = 	 9,
-  keywords = 	 {Domain-Specific Language, Explainable Analysis, Heuristic Analysis},
-  location = 	 {Irvine, CA, USA}}
-
-
-@inproceedings{end-to-end,
-author = {Namyar, Pooria and Schapira, Michael and Govindan, Ramesh and Segarra, Santiago and Beckett, Ryan and Kakarla, Siva Kesava Reddy and Arzani, Behnaz},
-title = {End-to-End Performance Analysis of Learning-enabled Systems},
-year = {2024},
-isbn = {9798400712722},
-publisher = {Association for Computing Machinery},
-address = {New York, NY, USA},
-url = {https://doi.org/10.1145/3696348.3696875},
-doi = {10.1145/3696348.3696875},
-abstract = {We propose a performance analysis tool for learning-enabled systems that allows operators to uncover potential performance issues before deploying DNNs in their systems. The tools that exist for this purpose require operators to faithfully model all components (a white-box approach) or do inefficient black-box local search. We propose a gray-box alternative, which eliminates the need to precisely model all the system's components. Our approach is faster and finds substantially worse scenarios compared to prior work. We show that a state-of-the-art learning-enabled traffic engineering pipeline can underperform the optimal by 6\texttimes{} --- a much higher number compared to what the authors found.},
-booktitle = {Proceedings of the 23rd ACM Workshop on Hot Topics in Networks},
-pages = {86–94},
-numpages = {9},
-keywords = {Machine Learning for Systems, Performance Analysis},
-location = {Irvine, CA, USA},
-series = {HotNets '24}
-}
-
 @inproceedings{fall2003dtn,
   author = {Fall, Kevin},
   title = {A Delay-Tolerant Network Architecture for Challenged Internets},
@@ -90,6 +36,33 @@ series = {HotNets '24}
   doi = {10.1109/TNET.2007.897964}
 }
 
+@inproceedings{jain2004routing,
+  author = {Jain, Sushant and Fall, Kevin and Patra, Rabin},
+  title = {Routing in a Delay Tolerant Network},
+  booktitle = {Proceedings of the 2004 Conference on Applications, Technologies, Architectures, and Protocols for Computer Communications},
+  year = {2004},
+  pages = {145--158},
+  publisher = {Association for Computing Machinery},
+  doi = {10.1145/1015467.1015484}
+}
+
+@inproceedings{burgess2006maxprop,
+  author = {Burgess, John and Gallagher, Brian and Jensen, David and Levine, Brian Neil},
+  title = {MaxProp: Routing for Vehicle-Based Disruption-Tolerant Networks},
+  booktitle = {Proceedings IEEE INFOCOM 2006},
+  year = {2006},
+  pages = {1--11},
+  doi = {10.1109/INFOCOM.2006.228}
+}
+
+@misc{lindgren2012prophet,
+  author = {Lindgren, Anders and Doria, Avri and Davies, Elwyn and Grasic, Samo},
+  title = {Probabilistic Routing Protocol for Intermittently Connected Networks},
+  year = {2012},
+  howpublished = {RFC 6693},
+  doi = {10.17487/RFC6693}
+}
+
 @inproceedings{song2007evaluating,
   author = {Song, Libo and Kotz, David},
   title = {Evaluating Opportunistic Routing Protocols with Large Realistic Contact Traces},
@@ -98,4 +71,14 @@ series = {HotNets '24}
   pages = {35--42},
   publisher = {Association for Computing Machinery},
   doi = {10.1145/1287791.1287799}
+}
+
+@article{sobin2016survey,
+  author = {Sobin, C. C. and Raychoudhury, Vaskar and Marfia, Gustavo and Singla, Ankita},
+  title = {A Survey of Routing and Data Dissemination in Delay Tolerant Networks},
+  journal = {Journal of Network and Computer Applications},
+  volume = {67},
+  pages = {128--146},
+  year = {2016},
+  doi = {10.1016/j.jnca.2016.01.002}
 }
