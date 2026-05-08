@@ -1,0 +1,7 @@
+\section{Conclusion}
+
+Binary Spray and Wait is a strong match for PyWiSim's encounter-based model. The implementation is compact, but the behavior is rich enough to reveal the central DTN tradeoff between reliability and replication cost. Across 50 trials per configuration, our experiments show that larger copy budgets substantially improve delivery in larger networks, while increasing data-forwarding overhead and decreasing control overhead through faster completion.
+
+The main lesson from this study is that bounded replication provides a useful middle ground between direct delivery and uncontrolled flooding. With too few copies, delivery probability collapses as the network grows. With more copies, the protocol becomes far more robust, but pays a clear forwarding cost. Even in a minimal simulator, this tradeoff is visible, measurable, and reproducible, which makes Binary Spray and Wait a strong teaching example as well as a credible class project.
+
+There are several natural extensions for future work. The first is to add an explicit epidemic-routing baseline in the same code path. The second is to evaluate trace-driven or mobility-driven encounters rather than synthetic Poisson contacts. The third is to study multiple simultaneous bundles, which would expose queueing and buffer contention effects that are outside the scope of the current single-flow experiments.

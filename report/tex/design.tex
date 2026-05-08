@@ -1,0 +1,36 @@
+\section{System Design}
+
+\subsection{Network Model}
+
+We use PyWiSim's encounter-based extension to model an intermittently connected wireless network. All nodes are normally placed far apart, so no radio neighbors exist by default. An \texttt{EncounterManager} samples pairwise meetings from a Poisson process and temporarily co-locates the selected node pair for a short encounter interval. During that interval, the nodes communicate using the same \texttt{unicast()} primitive provided by the base simulator. This model intentionally abstracts away detailed mobility trajectories and instead focuses on the key DTN property: communication occurs only when two nodes happen to meet.
+
+This abstraction is appropriate for a first implementation of Binary Spray and Wait because the protocol fundamentally reasons about encounters rather than stable end-to-end routes. It also aligns well with the educational design of PyWiSim, which exposes node behavior through event handlers and message passing without forcing a complex simulator stack.
+
+\subsection{Protocol Logic}
+
+Each message is represented as a bundle with four core fields: message identifier, source, destination, and creation time. Each node additionally stores a local integer copy count for every bundle it currently carries. The source injects a new bundle with an initial copy budget $K$.
+
+Our implementation follows the binary variant of Spray and Wait~\cite{spyropoulos2005spraywait}. When two nodes encounter, each first sends a compact summary containing the set of bundle identifiers it currently holds. After receiving the peer's summary, a node processes each bundle it has that the peer lacks:
+\begin{itemize}
+    \item If the peer is the destination, the node sends a \texttt{DELIVER} message and the bundle is considered delivered.
+    \item Otherwise, if the node holds more than one copy, it enters the spray phase and transfers $\lfloor L/2 \rfloor$ copies to the peer, keeping the remaining copies locally.
+    \item If the node holds exactly one copy and the peer is not the destination, it waits and does not forward further.
+\end{itemize}
+
+This design has two useful properties. First, the total number of bundle copies never exceeds the initial budget $K$. Second, nodes that already reached the wait phase forward only to the final destination, which prevents the explosive replication behavior associated with flooding-based DTN schemes.
+
+\subsection{Implementation Details}
+
+The protocol is implemented in \texttt{spray\_wait.py}. A \texttt{BinarySprayWaitNode} stores its current bundles and reacts to four message types: \texttt{ENCOUNTER}, \texttt{SUMMARY}, \texttt{SPRAY}, and \texttt{DELIVER}. The encounter callback triggers a summary exchange, while the summary handler decides whether to spray copies or deliver directly to the destination.
+
+To support a more honest evaluation, the implementation distinguishes between data and control transmissions:
+\begin{itemize}
+    \item \textbf{Data transmissions} are bundle-carrying actions: \texttt{SPRAY} and \texttt{DELIVER}.
+    \item \textbf{Control transmissions} are summary exchanges used to discover whether the peer already has a given bundle.
+\end{itemize}
+
+This distinction matters. In early experiments, counting all transmissions together produced a misleading result in which larger copy budgets sometimes appeared to reduce overhead. The reason was that aggressive replication often delivered the bundle sooner, which shortened the run and reduced subsequent control traffic. Separating data and control overhead makes the tradeoff interpretable: larger $K$ should generally increase forwarding cost, even if it also shortens time-to-delivery.
+
+\subsection{Design Choices and Scope}
+
+We intentionally study a single-bundle, lossless-contact setting. This keeps the evaluation focused on the forwarding policy itself rather than on queue management, wireless contention, buffer overflow, or packet loss. The resulting model is not a full DTN stack, but it is sufficient to test the central algorithmic question of this report: how the Binary Spray and Wait copy budget shapes delivery performance and transmission cost as the network grows.

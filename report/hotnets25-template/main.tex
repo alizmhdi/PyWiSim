@@ -1,0 +1,35 @@
+\documentclass[sigconf]{acmart}
+\settopmatter{printfolios=true,printccs=false,printacmref=false}
+
+\title{Binary Spray and Wait over an intermittently connected mobile network}
+
+\author{Mahdi Alizadeh}
+\affiliation{%
+  \institution{University of Southern California}%
+  \city{Los Angeles, CA}
+  \country{USA}%
+}
+
+\settopmatter{printacmref=false} % Removes the ACM reference format box
+\setcopyright{none}
+\renewcommand\footnotetextcopyrightpermission[1]{} %
+
+\begin{abstract}
+Intermittently connected mobile networks (ICMNs) are wireless networks in which end-to-end paths rarely exist at any single instant, making conventional MANET routing ineffective. This report implements Binary Spray and Wait in PyWiSim, a lightweight wireless distributed protocol simulator, and evaluates how the copy budget affects delivery latency and transmission cost. Our implementation uses PyWiSim's encounter-based extension to model pairwise Poisson contacts and treats $K{=}1$ as a direct-delivery baseline, with larger $K$ enabling controlled replication. We evaluate networks of 8, 12, 16, and 20 nodes over 50 independent trials per setting for $K \in \{1,2,4,N\}$. The results show that increasing the copy budget sharply improves delivery probability as the network grows, but also raises data-forwarding overhead. At the same time, larger $K$ reduces control overhead because delivery tends to complete earlier. These experiments demonstrate that even in a minimal simulator, Binary Spray and Wait captures the central DTN tradeoff between reliability, delay, and replication cost.
+\end{abstract}
+
+\begin{document}
+
+\maketitle
+
+\input{../tex/intro}
+\input{../tex/design}
+\input{../tex/evaluation}
+\input{../tex/related_work}
+\input{../tex/conclusion}
+
+
+\bibliographystyle{ACM-Reference-Format} 
+\bibliography{ref}
+
+\end{document}
