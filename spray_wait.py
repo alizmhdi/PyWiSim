@@ -95,6 +95,7 @@ def run_binary_spray_wait(
     copies=4,
     rate=1.5,
     duration=1.0,
+    loss=0.0,
     seed=42,
     until=30.0,
     node_ids=None,
@@ -116,7 +117,7 @@ def run_binary_spray_wait(
         raise ValueError("source and destination must be different")
 
     loop = EventLoop()
-    net = WirelessNetwork(loop, loss=0.0, tx_time=0.01, verbose=verbose, seed=seed)
+    net = WirelessNetwork(loop, loss=loss, tx_time=0.01, verbose=verbose, seed=seed)
     tracker = {
         'data_tx': 0,
         'delivered_at': None,
@@ -160,6 +161,7 @@ def run_binary_spray_wait(
         'holders': holders,
         'node_ids': node_ids,
         'copies': copies,
+        'loss': loss,
         'node_count': node_count,
         'seed': seed,
         'until': until,

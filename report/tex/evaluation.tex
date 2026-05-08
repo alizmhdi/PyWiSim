@@ -12,7 +12,7 @@ We report four metrics:
     \item \textbf{Control overhead}: average number of summary exchanges.
 \end{itemize}
 
-All experiments are reproducible through the evaluation script \texttt{examples/evaluate\_spray\_wait.py}. The script writes the full CSV file and generates the figures included below. The source code for the protocol, experiments, and report is publicly available at \url{https://github.com/alizmhdi/PyWiSim}. The exact experiment in this report can be regenerated with \texttt{python examples/evaluate\_spray\_wait.py --copies 1 2 4 N --trials 50}.
+All experiments are reproducible through the evaluation scripts \texttt{examples/evaluate\_spray\_wait.py} and \texttt{examples/evaluate\_spray\_wait\_loss.py}. These scripts write CSV outputs and generate the figures included below. The source code for the protocol, experiments, and report is publicly available at \url{https://github.com/alizmhdi/PyWiSim}. The main topology sweep in this report can be regenerated with \texttt{python examples/evaluate\_spray\_wait.py --copies 1 2 4 N --trials 50}.
 
 \subsection{Main Results}
 
@@ -52,6 +52,21 @@ Figure~\ref{fig:control} explains an initially counterintuitive behavior we obse
     \label{fig:control}
 \end{figure}
 
+\subsection{Robustness to Packet Loss}
+
+PyWiSim also allows probabilistic packet loss in the wireless channel, so we performed an additional robustness study under lossy encounters. Because the encounter-based DTN model temporarily co-locates two nodes when they meet, packet loss in this setting should be interpreted as random transmission failure \emph{during an encounter} rather than as long-distance propagation loss. We therefore treat this experiment as a robustness check rather than as a full physical-layer model.
+
+For this sweep, we fix the network size at 16 nodes and evaluate $K \in \{1,4,N\}$ over loss probabilities $\{0.00, 0.05, 0.10, 0.15\}$, again using 50 trials per setting. Figure~\ref{fig:loss} summarizes the results. The broad trend is that lossy encounters hurt delivery and increase delay, but larger copy budgets remain noticeably more resilient. With $K{=}1$, delivery is already weak even without loss (56\%) and remains fragile across the lossy settings. With $K{=}4$, delivery degrades from 90\% at zero loss to 82\% at 10--15\% loss. With $K{=}N$, delivery remains high throughout the sweep, falling only from 100\% at zero loss to 88\% at 15\% loss.
+
+These results reinforce the main conclusion of the paper. Replication does not only help against sparse connectivity; it also provides robustness against unreliable transmissions by creating multiple chances for successful forwarding and delivery. At the same time, the lossy experiments show that packet drops can increase the forwarding effort needed to maintain good performance, especially for aggressive replication budgets.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{../results/spray_wait_loss/spray_wait_loss_metrics.png}
+    \caption{Effect of packet loss on delivery, delay, and data overhead for a 16-node network.}
+    \label{fig:loss}
+\end{figure}
+
 \subsection{Interpretation}
 
 These results are consistent with the intuition behind Spray and Wait. Direct transmission ($K{=}1$) is inexpensive in terms of bundle copies, but it relies on the source or the current single holder meeting the destination directly, which becomes increasingly unlikely in larger sparse networks. Adding copies increases the chance that some carrier will meet the destination earlier, thereby improving delivery rate and often reducing delay. Binary splitting provides a disciplined version of this replication: it is far less wasteful than flooding, yet much more robust than direct delivery.
@@ -60,6 +75,6 @@ The results also show that there is no single universally optimal $K$ if one val
 
 \subsection{Limitations}
 
-Our evaluation is intentionally simple, and the claims of this report should be interpreted accordingly. First, the encounter model is synthetic: pairwise meetings are sampled from a Poisson process rather than from mobility traces or social-contact data. Second, the experiments involve only one outstanding bundle at a time, so there is no queueing competition, buffer pressure, or fairness issue. Third, the fixed source-destination pair is held constant across trials for each network size; only the encounter realization changes. Finally, the current implementation does not compare against a fully implemented epidemic-routing baseline in the same code path, although $K{=}1$ provides a useful direct-delivery baseline and $K{=}N$ provides an aggressive replication reference point.
+Our evaluation is intentionally simple, and the claims of this report should be interpreted accordingly. First, the encounter model is synthetic: pairwise meetings are sampled from a Poisson process rather than from mobility traces or social-contact data. Second, the experiments involve only one outstanding bundle at a time, so there is no queueing competition, buffer pressure, or fairness issue. Third, the fixed source-destination pair is held constant across trials for each network size; only the encounter realization changes. Fourth, the packet-loss experiment models random failure during encounters, not a full wireless propagation process over space. Finally, the current implementation does not compare against a fully implemented epidemic-routing baseline in the same code path, although $K{=}1$ provides a useful direct-delivery baseline and $K{=}N$ provides an aggressive replication reference point.
 
 Despite these limitations, the study is still credible as a compact simulator-based evaluation because the model matches the core assumptions of the protocol, the experiments are repeated many times, the metrics are carefully defined, and the conclusions are aligned with the evidence rather than overstated.

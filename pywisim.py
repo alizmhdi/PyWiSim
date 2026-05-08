@@ -44,6 +44,9 @@ class WirelessNetwork:
         if not any(m == mid for m, *_ in self._txs): return
         d = self.dist(sender, recv)
         if not self.loss and d > self.R: return
-        if self.loss and self.rng.random() > (1-self.loss)/(1+math.exp(4/self.R*(d-2*self.R))): return
+        if self.loss:
+            x = 4/self.R*(d-2*self.R)
+            p = 0.0 if x > 50 else ((1-self.loss) if x < -50 else (1-self.loss)/(1+math.exp(x)))
+            if self.rng.random() > p: return
         self.log(f"{recv} <- {sender}: {msg}")
         self.nodes[recv].on_receive(msg, sender)
